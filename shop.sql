@@ -62,7 +62,7 @@ INSERT INTO `products` (`barcode`, `product_name`, `price`) VALUES
 ('5901234123476', 'Papier toaletowy', 14.50),
 ('5414635120807', 'Sprezone powietrze', 520.00),
 ('5449000234636', 'Sprite', 9.00),
-('5449000011527', 'Fanta', 12.00)
+('5449000011527', 'Fanta', 12.00),
 ('5449000000996', 'Coca-Cola', 10.00);
 COMMIT;
 
