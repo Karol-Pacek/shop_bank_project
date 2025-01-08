@@ -59,7 +59,8 @@ INSERT INTO `products` (`barcode`, `product_name`, `price`) VALUES
 ('5901234123473', 'Pasta do zebow', 7.20),
 ('5901234123474', 'Mydlo w plynie', 5.90),
 ('5901234123475', 'Plyn do naczyn', 6.80),
-('5901234123476', 'Papier toaletowy', 14.50);
+('5901234123476', 'Papier toaletowy', 14.50),
+('5414635120807', 'Sprezone powietrze', 520.00);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
