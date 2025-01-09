@@ -1,0 +1,20 @@
+package org.example;
+
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+public class Main {
+    public static void main(String[] args) {
+
+        ProductList productList = new ProductList();
+        ScannerLogic scannerLogic = new ScannerLogic(productList);
+
+        productList.addProduct("1234567890000", "kremówka", 21.37);
+        productList.addProduct("1234567890123", "humunkulus", 59.99);
+        productList.addProduct("1234567891234", "schwepsik", 8.59);
+        productList.addProduct("1234567892345", "John Produkt", 999999.99);
+        productList.addProduct("1234567893456", "powietrze 0.5l", 4.23);
+
+        scannerLogic.start();
+
+    }
+}
