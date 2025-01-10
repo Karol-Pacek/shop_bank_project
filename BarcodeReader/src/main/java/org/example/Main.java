@@ -13,8 +13,10 @@ public class Main {
         productList.addProduct("1234567891234", "schwepsik", 8.59);
         productList.addProduct("1234567892345", "John Produkt", 999999.99);
         productList.addProduct("1234567893456", "powietrze 0.5l", 4.23);
-
+        productList.addProduct("5449000000996", "cocla", 999.12);
+        productList.addProduct("5449000234636", "nigger", 69.4202137);
         scannerLogic.start();
+
 
     }
 }

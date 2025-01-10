@@ -13,18 +13,13 @@ public class ScannerLogic {
     public void start() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Zeskanuj produkt: 1 | Zakończ program: dowolny");
-        String answer = scanner.nextLine();
-
-        if(Objects.equals(answer, "1")) {
-            System.out.println("Podaj kod produktu: ");
-            String code = String.valueOf(scanner.nextLong());
-            Product result = readInput(code);
-            if(result != null) {
-                System.out.println("Zeskanowano " + "\u001B[32m" + result.name + "\u001B[0m" + " o cenie " + "\u001B[33m" + result.price + "\u001B[0m");
-            }
-            start();
+        System.out.println("Podaj kod produktu: ");
+        String code = String.valueOf(scanner.nextLong());
+        Product result = readInput(code);
+        if(result != null) {
+            System.out.println("Zeskanowano " + "\u001B[32m" + result.name + "\u001B[0m" + " o cenie " + "\u001B[33m" + result.price + "\u001B[0m");
         }
+        start();
     }
 
     public Product readInput(String code) {
