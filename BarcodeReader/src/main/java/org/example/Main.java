@@ -1,4 +1,5 @@
 package org.example;
+import java.sql.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -15,7 +16,41 @@ public class Main {
         productList.addProduct("1234567893456", "powietrze 0.5l", 4.23);
         productList.addProduct("5449000000996", "cocla", 999.12);
         productList.addProduct("5449000234636", "nigger", 69.4202137);
+
+        //JDBC database connection
+
+        String url = "jdbc:mysql://localhost:3306/shop";
+        String username = "root";
+        String password = "";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection connection = DriverManager.getConnection(url, username, password);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("select * from products");
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getLong("barcode"));
+            }
+
+
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
+
+
+
+
+
+
         scannerLogic.start();
+
+
+
 
 
     }
