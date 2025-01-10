@@ -9,6 +9,11 @@ public class ProductList {
 
     public ProductList() {}
 
+    public static ProductList createListFromDbData(ArrayList<Long> data) {
+        //data -> ProductList
+        return new ProductList();
+    }
+
     public void addProduct(String barcode, String name, double price) {
         if (barcode.length() == 13) {
             products.put(barcode, new Product(name,price));

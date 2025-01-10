@@ -6,7 +6,7 @@ import java.sql.*;
 public class Main {
     public static void main(String[] args) {
 
-        ProductList productList = new ProductList();
+        /*ProductList productList = new ProductList();
         ScannerLogic scannerLogic = new ScannerLogic(productList);
 
         productList.addProduct("1234567890000", "kremówka", 21.37);
@@ -17,7 +17,7 @@ public class Main {
         productList.addProduct("5449000000996", "cocla", 999.12);
         productList.addProduct("5449000234636", "nigger", 69.4202137);
 
-        //JDBC database connection
+                    //JDBC database connection
 
         String url = "jdbc:mysql://localhost:3306/shop";
         String username = "root";
@@ -26,7 +26,6 @@ public class Main {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection connection = DriverManager.getConnection(url, username, password);
-
             Statement statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery("select * from products");
@@ -39,13 +38,13 @@ public class Main {
         }
         catch (Exception e) {
             System.out.println(e);
-        }
+        }*/
 
 
 
 
-
-
+        ProductList productList = ProductList.createListFromDbData(DbUtils.getData());
+        ScannerLogic scannerLogic = new ScannerLogic(productList);
 
         scannerLogic.start();
 
