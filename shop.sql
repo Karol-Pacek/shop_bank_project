@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 13, 2025 at 01:46 PM
+-- Generation Time: Sty 13, 2025 at 01:58 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -65,7 +65,8 @@ INSERT INTO `products` (`barcode`, `product_name`, `price`) VALUES
 ('5901234123473', 'Pasta do zebow', 7.20),
 ('5901234123474', 'Mydlo w plynie', 5.90),
 ('5901234123475', 'Plyn do naczyn', 6.80),
-('5901234123476', 'Papier toaletowy', 14.50);
+('5901234123476', 'Papier toaletowy', 14.50),
+('6921374201109', 'Property_in_egypt', 2000.00);
 
 -- --------------------------------------------------------
 
