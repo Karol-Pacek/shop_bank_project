@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 08, 2025 at 02:20 PM
+-- Generation Time: Sty 13, 2025 at 01:46 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `shop`
 --
+CREATE DATABASE IF NOT EXISTS `shop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `shop`;
 
 -- --------------------------------------------------------
 
@@ -40,6 +42,10 @@ CREATE TABLE IF NOT EXISTS `products` (
 --
 
 INSERT INTO `products` (`barcode`, `product_name`, `price`) VALUES
+('5414635120807', 'Sprezone powietrze', 520.00),
+('5449000000996', 'Coca-Cola', 10.00),
+('5449000011527', 'Fanta', 12.00),
+('5449000234636', 'Sprite', 9.00),
 ('5901234123457', 'Mleko', 3.50),
 ('5901234123458', 'Chleb pelnoziarnisty', 4.20),
 ('5901234123459', 'Masko ', 6.90),
@@ -59,11 +65,48 @@ INSERT INTO `products` (`barcode`, `product_name`, `price`) VALUES
 ('5901234123473', 'Pasta do zebow', 7.20),
 ('5901234123474', 'Mydlo w plynie', 5.90),
 ('5901234123475', 'Plyn do naczyn', 6.80),
-('5901234123476', 'Papier toaletowy', 14.50),
-('5414635120807', 'Sprezone powietrze', 520.00),
-('5449000234636', 'Sprite', 9.00),
-('5449000011527', 'Fanta', 12.00),
-('5449000000996', 'Coca-Cola', 10.00);
+('5901234123476', 'Papier toaletowy', 14.50);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `purchase_details`
+--
+
+DROP TABLE IF EXISTS `purchase_details`;
+CREATE TABLE IF NOT EXISTS `purchase_details` (
+  `purchase_detail_id` int(11) NOT NULL AUTO_INCREMENT,
+  `purchase_history_id` int(11) DEFAULT NULL,
+  `barcode` varchar(13) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  PRIMARY KEY (`purchase_detail_id`),
+  KEY `barcode` (`barcode`),
+  KEY `purchase_history_id` (`purchase_history_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `purchase_history`
+--
+
+DROP TABLE IF EXISTS `purchase_history`;
+CREATE TABLE IF NOT EXISTS `purchase_history` (
+  `purchase_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `purchase_date` date DEFAULT NULL,
+  PRIMARY KEY (`purchase_history_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `purchase_details`
+--
+ALTER TABLE `purchase_details`
+  ADD CONSTRAINT `barcode` FOREIGN KEY (`barcode`) REFERENCES `products` (`barcode`),
+  ADD CONSTRAINT `purchase_history_id` FOREIGN KEY (`purchase_history_id`) REFERENCES `purchase_history` (`purchase_history_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
