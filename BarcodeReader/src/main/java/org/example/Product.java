@@ -1,7 +1,5 @@
 package org.example;
 
-import java.util.Scanner;
-
 public class Product {
     String barcode;
     String name;
@@ -11,5 +9,10 @@ public class Product {
         this.barcode = barcode;
         this.name = name;
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return name + " - " + price + " PLN";
     }
 }
