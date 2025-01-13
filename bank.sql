@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 13, 2025 at 01:40 PM
+-- Generation Time: Sty 13, 2025 at 02:24 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -35,7 +35,23 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `name` varchar(50) DEFAULT NULL,
   `surname` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `clients`
+--
+
+INSERT INTO `clients` (`client_id`, `name`, `surname`) VALUES
+(1, 'Adolf', 'Hitler'),
+(2, 'Skibidi', 'Toilet'),
+(3, 'Property', 'Egypt'),
+(4, 'Jacek', 'Jaworek'),
+(5, 'Marek', 'Mostowiak'),
+(6, 'Chun', 'Li'),
+(7, 'Hubert', 'Kowalski'),
+(8, 'Kacper', 'Skowronek'),
+(9, 'Ewa', 'Rułan'),
+(10, 'Han', 'Solo');
 
 -- --------------------------------------------------------
 
