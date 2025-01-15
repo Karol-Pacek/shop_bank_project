@@ -4,6 +4,7 @@ public class Product {
     String barcode;
     String name;
     double price;
+    int quantity = 1;
 
     public Product(String barcode, String name, double price) {
         this.barcode = barcode;

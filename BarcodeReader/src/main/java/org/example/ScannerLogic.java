@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class ScannerLogic {
     DbUtils db = new DbUtils();
-    Map<Product, Integer> scannedProducts = new HashMap<>();
+    Map<String, Product> scannedProducts = new HashMap<>();
     double totalSum = 0.0;
     public ScannerLogic() { }
     public void start() {
@@ -42,19 +42,22 @@ public class ScannerLogic {
         }
     }
     private void addProduct(Product product) {
-        scannedProducts.put(product, scannedProducts.getOrDefault(product, 0) + 1);
-        totalSum += product.price;
+        if(scannedProducts.containsKey(product.barcode)) {
+            scannedProducts.get(product.barcode).quantity ++;
+        }
+        else {
+            scannedProducts.put(product.barcode, product);
+        }
     }
                                     //receipt
     private void printReceipt() {
         System.out.println("\n====== PARAGON ======");
-        for (Map.Entry<Product, Integer> entry : scannedProducts.entrySet()) {
-            Product product = entry.getKey();
-            int quantity = entry.getValue();
-            double subtotal = product.price * quantity;
-
+        for (Map.Entry<String, Product> entry : scannedProducts.entrySet()) {
+            Product product = entry.getValue();
+            double subtotal = product.price * product.quantity;
+            totalSum += subtotal;
                                       //receipt view
-            System.out.println(product.name + " x" + quantity + " - " + subtotal + " PLN");
+            System.out.println(product.name + " x" + product.quantity + " - " + subtotal + " PLN");
         }
         System.out.println("=====================");
         System.out.println("SUMA PLN: " + totalSum);
