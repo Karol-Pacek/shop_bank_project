@@ -15,18 +15,22 @@ public class ScannerLogic {
 
         //adding more products or terminating this procedure
         while (true) {
-            System.out.println("Podaj kod produktu lub wpisz 'wydrukuj paragon' aby zakonczyc: ");
+            System.out.println("Podaj kod produktu: ");
             String input = scanner.nextLine();
 
-            if (input.equalsIgnoreCase("wydrukuj paragon")) {
+            /*if (input.equalsIgnoreCase("wydrukuj paragon")) {
                 printReceipt();
                 break;
             }
+            */
+
 
             Product result = readInput(input);
             if (result != null) {
                 addProduct(result);
                 System.out.println("Zeskanowano " + "\u001B[32m" + result.name + "\u001B[0m" + " o cenie " + "\u001B[33m" + result.price + " PLN\u001B[0m");
+                printReceipt();
+                clearScreen();
             }
         }
     }
@@ -63,4 +67,10 @@ public class ScannerLogic {
         System.out.println("SUMA PLN: " + totalSum);
         System.out.println("=====================");
     }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
 }
