@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 22, 2025 at 02:22 PM
+-- Generation Time: Sty 24, 2025 at 01:50 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -22,6 +22,63 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `bank` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `bank`;
+
+DELIMITER $$
+--
+-- Procedury
+--
+DROP PROCEDURE IF EXISTS `TransferBalance`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `TransferBalance` (IN `giver_account` INT, IN `receiver_account` INT, IN `transfer_amount` DECIMAL(15,2), OUT `result_message` VARCHAR(255))   BEGIN
+    DECLARE
+        giver_balance DECIMAL(15, 2) ;
+        -- Sprawdzenie salda darczyńcy
+    SELECT
+        balance
+    INTO giver_balance
+FROM
+    accounts
+WHERE
+    account_number = giver_account ;
+    -- Sprawdzenie, czy darczyńca ma wystarczające środki
+    IF giver_balance < transfer_amount THEN
+SET
+    result_message = 'Insufficient funds' ; 
+END IF ;
+-- Zmniejszenie salda darczyńcy
+UPDATE
+    accounts
+SET
+    balance = balance - transfer_amount
+WHERE
+    account_number = giver_account ;
+    -- Zwiększenie salda odbiorcy
+UPDATE
+    accounts
+SET
+    balance = balance + transfer_amount
+WHERE
+    account_number = receiver_account ;
+    -- Zalogowanie transakcji
+INSERT INTO transactions(
+    giver_account_number,
+    receiver_account_number,
+    transaction_type,
+    amount,
+    description
+)
+VALUES(
+    giver_account,
+    receiver_account,
+    'transfer',
+    transfer_amount,
+    'Balance transfer'
+) ;
+-- Ustawienie komunikatu o pomyślnym transferze
+SET
+    result_message = 'Transfer successful' ;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
