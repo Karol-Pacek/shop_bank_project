@@ -27,10 +27,10 @@ public class ScannerLogic {
 
             Product result = readInput(input);
             if (result != null) {
+                clearScreen();
                 addProduct(result);
                 System.out.println("Zeskanowano " + "\u001B[32m" + result.name + "\u001B[0m" + " o cenie " + "\u001B[33m" + result.price + " PLN\u001B[0m");
                 printReceipt();
-                clearScreen();
             }
         }
     }
