@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 24, 2025 at 01:50 PM
+-- Generation Time: Sty 29, 2025 at 02:55 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -87,14 +87,12 @@ DELIMITER ;
 --
 
 DROP TABLE IF EXISTS `accounts`;
-CREATE TABLE IF NOT EXISTS `accounts` (
-  `account_number` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `accounts` (
+  `account_number` int(11) NOT NULL,
   `client_id` int(11) NOT NULL,
   `credit` decimal(15,2) DEFAULT NULL,
-  `validity` date DEFAULT NULL,
-  PRIMARY KEY (`account_number`),
-  KEY `client_id` (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `validity` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `accounts`
@@ -114,26 +112,26 @@ INSERT INTO `accounts` (`account_number`, `client_id`, `credit`, `validity`) VAL
 --
 
 DROP TABLE IF EXISTS `cards`;
-CREATE TABLE IF NOT EXISTS `cards` (
-  `card_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `cards` (
+  `card_id` int(11) NOT NULL,
   `account_number` int(11) NOT NULL,
   `cvc` varchar(3) DEFAULT NULL,
   `expiry_date` date DEFAULT NULL,
   `balance` decimal(15,2) DEFAULT NULL,
-  PRIMARY KEY (`card_id`),
-  KEY `account_number` (`account_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `card_number` varchar(16) NOT NULL,
+  `pin` smallint(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `cards`
 --
 
-INSERT INTO `cards` (`card_id`, `account_number`, `cvc`, `expiry_date`, `balance`) VALUES
-(1, 1, '123', '2026-12-31', 250.00),
-(2, 2, '234', '2027-03-15', 300.00),
-(3, 3, '345', '2025-08-25', 200.00),
-(4, 4, '456', '2025-10-05', 150.00),
-(5, 5, '567', '2027-07-20', 1200.00);
+INSERT INTO `cards` (`card_id`, `account_number`, `cvc`, `expiry_date`, `balance`, `card_number`, `pin`) VALUES
+(1, 1, '123', '2026-12-31', 250.00, '1234567890123456', 4567),
+(2, 2, '234', '2027-03-15', 300.00, '6668754477950999', 7898),
+(3, 3, '345', '2025-08-25', 200.00, '8718679866989676', 2233),
+(4, 4, '456', '2025-10-05', 150.00, '3368393939345794', 1234),
+(5, 5, '567', '2027-07-20', 1200.00, '7357892547898554', 2351);
 
 -- --------------------------------------------------------
 
@@ -142,18 +140,15 @@ INSERT INTO `cards` (`card_id`, `account_number`, `cvc`, `expiry_date`, `balance
 --
 
 DROP TABLE IF EXISTS `clients`;
-CREATE TABLE IF NOT EXISTS `clients` (
-  `client_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `clients` (
+  `client_id` int(11) NOT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `pesel` varchar(11) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone_number` varchar(20) DEFAULT NULL,
-  `birth_date` date DEFAULT NULL,
-  PRIMARY KEY (`client_id`),
-  UNIQUE KEY `pesel` (`pesel`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `birth_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `clients`
@@ -173,18 +168,15 @@ INSERT INTO `clients` (`client_id`, `first_name`, `last_name`, `pesel`, `email`,
 --
 
 DROP TABLE IF EXISTS `transactions`;
-CREATE TABLE IF NOT EXISTS `transactions` (
-  `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `transactions` (
+  `transaction_id` int(11) NOT NULL,
   `giver_account_number` int(11) DEFAULT NULL,
   `receiver_account_number` int(11) DEFAULT NULL,
   `transaction_type` enum('deposit','withdrawal','transfer') NOT NULL,
   `amount` decimal(15,2) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`transaction_id`),
-  KEY `giver_account_number` (`giver_account_number`),
-  KEY `receiver_account_number` (`receiver_account_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `description` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `transactions`
@@ -196,6 +188,69 @@ INSERT INTO `transactions` (`transaction_id`, `giver_account_number`, `receiver_
 (3, 3, NULL, 'withdrawal', 150.00, '2025-01-22 13:17:19', 'ATM -KOKS >:0- withdrawal'),
 (4, NULL, 4, 'deposit', 300.00, '2025-01-22 13:17:19', 'totally not money laundering deposit'),
 (5, 4, 5, 'transfer', 50.00, '2025-01-22 13:17:19', 'zazaaaauuu');
+
+--
+-- Indeksy dla zrzutów tabel
+--
+
+--
+-- Indeksy dla tabeli `accounts`
+--
+ALTER TABLE `accounts`
+  ADD PRIMARY KEY (`account_number`),
+  ADD KEY `client_id` (`client_id`);
+
+--
+-- Indeksy dla tabeli `cards`
+--
+ALTER TABLE `cards`
+  ADD PRIMARY KEY (`card_id`),
+  ADD UNIQUE KEY `card_number` (`card_number`),
+  ADD KEY `account_number` (`account_number`);
+
+--
+-- Indeksy dla tabeli `clients`
+--
+ALTER TABLE `clients`
+  ADD PRIMARY KEY (`client_id`),
+  ADD UNIQUE KEY `pesel` (`pesel`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indeksy dla tabeli `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`transaction_id`),
+  ADD KEY `giver_account_number` (`giver_account_number`),
+  ADD KEY `receiver_account_number` (`receiver_account_number`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `accounts`
+--
+ALTER TABLE `accounts`
+  MODIFY `account_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `cards`
+--
+ALTER TABLE `cards`
+  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `clients`
+--
+ALTER TABLE `clients`
+  MODIFY `client_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
