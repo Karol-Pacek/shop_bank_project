@@ -1,5 +1,6 @@
 package org.example;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,12 +19,10 @@ public class ScannerLogic {
             System.out.println("Podaj kod produktu: ");
             String input = scanner.nextLine();
 
-            /*if (input.equalsIgnoreCase("wydrukuj paragon")) {
-                printReceipt();
+            if (input.equalsIgnoreCase("pay")) {
+                payment();
                 break;
             }
-            */
-
 
             Product result = readInput(input);
             if (result != null) {
@@ -55,6 +54,7 @@ public class ScannerLogic {
     }
                                     //receipt
     private void printReceipt() {
+        totalSum = 0.0;
         System.out.println("\n====== PARAGON ======");
         for (Map.Entry<String, Product> entry : scannedProducts.entrySet()) {
             Product product = entry.getValue();
@@ -66,6 +66,18 @@ public class ScannerLogic {
         System.out.println("=====================");
         System.out.println("SUMA PLN: " + totalSum);
         System.out.println("=====================");
+    }
+
+    private void payment() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Podaj numer karty: ");
+        String card_num = sc.nextLine();
+        System.out.println("Podaj pin: ");
+        short pin = sc.nextShort();
+        System.out.println("Podaj cvc: ");
+        byte cvc = sc.nextByte();
+        db.paymentRequest(card_num, pin, cvc, totalSum, 1, "SKLEP Sklepex™ ZAKUPY");
     }
 
     public static void clearScreen() {
