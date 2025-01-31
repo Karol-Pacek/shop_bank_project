@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class ScannerLogic {
     DbUtils db = new DbUtils();
     Map<String, Product> scannedProducts = new HashMap<>();
-    double totalSum = 0.0;
+    float totalSum = 0;
     public ScannerLogic() { }
     public void start() {
         Scanner scanner = new Scanner(System.in);
@@ -54,7 +54,7 @@ public class ScannerLogic {
     }
                                     //receipt
     private void printReceipt() {
-        totalSum = 0.0;
+        totalSum = 0;
         System.out.println("\n====== PARAGON ======");
         for (Map.Entry<String, Product> entry : scannedProducts.entrySet()) {
             Product product = entry.getValue();
@@ -76,8 +76,8 @@ public class ScannerLogic {
         System.out.println("Podaj pin: ");
         short pin = sc.nextShort();
         System.out.println("Podaj cvc: ");
-        byte cvc = sc.nextByte();
-        db.paymentRequest(card_num, pin, cvc, totalSum, 1, "SKLEP Sklepex™ ZAKUPY");
+        short cvc = sc.nextShort();
+        db.paymentRequest(card_num, pin, cvc, totalSum, 1, "SKLEP Sklepex ZAKUPY");
     }
 
     public static void clearScreen() {
