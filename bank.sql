@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 29, 2025 at 02:55 PM
--- Wersja serwera: 10.4.32-MariaDB
--- Wersja PHP: 8.2.12
+-- Czas generowania: 24 Kwi 2025, 21:00
+-- Wersja serwera: 10.4.11-MariaDB
+-- Wersja PHP: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,17 +19,15 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `bank`
+-- Baza danych: `bank`
 --
-CREATE DATABASE IF NOT EXISTS `bank` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `bank`;
 
 DELIMITER $$
 --
 -- Procedury
 --
 DROP PROCEDURE IF EXISTS `TransferBalance`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `TransferBalance` (IN `giver_account` INT, IN `receiver_account` INT, IN `transfer_amount` DECIMAL(15,2), OUT `result_message` VARCHAR(255))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `TransferBalance` (IN `giver_account` INT, IN `receiver_account` INT, IN `transfer_amount` DECIMAL(15,2), OUT `result_message` VARCHAR(255))  BEGIN
     DECLARE
         giver_balance DECIMAL(15, 2) ;
         -- Sprawdzenie salda darczyńcy
@@ -92,18 +91,40 @@ CREATE TABLE `accounts` (
   `client_id` int(11) NOT NULL,
   `credit` decimal(15,2) DEFAULT NULL,
   `validity` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `accounts`
+-- Zrzut danych tabeli `accounts`
 --
 
 INSERT INTO `accounts` (`account_number`, `client_id`, `credit`, `validity`) VALUES
-(1, 1, 200.00, '2026-12-31'),
-(2, 2, 800.00, '2027-06-30'),
-(3, 3, 1000.00, '2025-05-10'),
-(4, 4, 500.00, '2025-12-01'),
-(5, 5, 1200.00, '2026-03-31');
+(1, 1, '200.00', '2026-12-31'),
+(2, 2, '800.00', '2027-06-30'),
+(3, 3, '1000.00', '2025-05-10'),
+(4, 4, '500.00', '2025-12-01'),
+(5, 5, '1200.00', '2026-03-31');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `blik`
+--
+
+DROP TABLE IF EXISTS `blik`;
+CREATE TABLE `blik` (
+  `blik_id` int(11) NOT NULL,
+  `card_id` int(11) NOT NULL,
+  `expiration` datetime DEFAULT (current_timestamp() + interval 2 minute),
+  `blik_code` int(11) NOT NULL,
+  `requested` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `blik`
+--
+
+INSERT INTO `blik` (`blik_id`, `card_id`, `expiration`, `blik_code`, `requested`) VALUES
+(1, 1, '2025-04-24 19:54:51', 322535, 0);
 
 -- --------------------------------------------------------
 
@@ -120,18 +141,18 @@ CREATE TABLE `cards` (
   `balance` decimal(15,2) DEFAULT NULL,
   `card_number` varchar(16) NOT NULL,
   `pin` smallint(6) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `cards`
+-- Zrzut danych tabeli `cards`
 --
 
 INSERT INTO `cards` (`card_id`, `account_number`, `cvc`, `expiry_date`, `balance`, `card_number`, `pin`) VALUES
-(1, 1, '123', '2026-12-31', 250.00, '1234567890123456', 4567),
-(2, 2, '234', '2027-03-15', 300.00, '6668754477950999', 7898),
-(3, 3, '345', '2025-08-25', 200.00, '8718679866989676', 2233),
-(4, 4, '456', '2025-10-05', 150.00, '3368393939345794', 1234),
-(5, 5, '567', '2027-07-20', 1200.00, '7357892547898554', 2351);
+(1, 1, '123', '2026-12-31', '250.00', '1234567890123456', 4567),
+(2, 2, '234', '2027-03-15', '300.00', '6668754477950999', 7898),
+(3, 3, '345', '2025-08-25', '200.00', '8718679866989676', 2233),
+(4, 4, '456', '2025-10-05', '150.00', '3368393939345794', 1234),
+(5, 5, '567', '2027-07-20', '1200.00', '7357892547898554', 2351);
 
 -- --------------------------------------------------------
 
@@ -148,10 +169,10 @@ CREATE TABLE `clients` (
   `email` varchar(100) DEFAULT NULL,
   `phone_number` varchar(20) DEFAULT NULL,
   `birth_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `clients`
+-- Zrzut danych tabeli `clients`
 --
 
 INSERT INTO `clients` (`client_id`, `first_name`, `last_name`, `pesel`, `email`, `phone_number`, `birth_date`) VALUES
@@ -176,18 +197,18 @@ CREATE TABLE `transactions` (
   `amount` decimal(15,2) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   `description` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `transactions`
+-- Zrzut danych tabeli `transactions`
 --
 
 INSERT INTO `transactions` (`transaction_id`, `giver_account_number`, `receiver_account_number`, `transaction_type`, `amount`, `timestamp`, `description`) VALUES
-(1, 1, 2, 'transfer', 100.00, '2025-01-22 13:17:19', 'SkibidiToilet_NightClub'),
-(2, 2, 3, 'transfer', 200.00, '2025-01-22 13:17:19', 'ZA ZySDA'),
-(3, 3, NULL, 'withdrawal', 150.00, '2025-01-22 13:17:19', 'ATM -KOKS >:0- withdrawal'),
-(4, NULL, 4, 'deposit', 300.00, '2025-01-22 13:17:19', 'totally not money laundering deposit'),
-(5, 4, 5, 'transfer', 50.00, '2025-01-22 13:17:19', 'zazaaaauuu');
+(1, 1, 2, 'transfer', '100.00', '2025-01-22 13:17:19', 'SkibidiToilet_NightClub'),
+(2, 2, 3, 'transfer', '200.00', '2025-01-22 13:17:19', 'ZA ZySDA'),
+(3, 3, NULL, 'withdrawal', '150.00', '2025-01-22 13:17:19', 'ATM -KOKS >:0- withdrawal'),
+(4, NULL, 4, 'deposit', '300.00', '2025-01-22 13:17:19', 'totally not money laundering deposit'),
+(5, 4, 5, 'transfer', '50.00', '2025-01-22 13:17:19', 'zazaaaauuu');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -199,6 +220,13 @@ INSERT INTO `transactions` (`transaction_id`, `giver_account_number`, `receiver_
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`account_number`),
   ADD KEY `client_id` (`client_id`);
+
+--
+-- Indeksy dla tabeli `blik`
+--
+ALTER TABLE `blik`
+  ADD PRIMARY KEY (`blik_id`),
+  ADD KEY `card_id` (`card_id`);
 
 --
 -- Indeksy dla tabeli `cards`
@@ -225,51 +253,63 @@ ALTER TABLE `transactions`
   ADD KEY `receiver_account_number` (`receiver_account_number`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT dla tabel zrzutów
 --
 
 --
--- AUTO_INCREMENT for table `accounts`
+-- AUTO_INCREMENT dla tabeli `accounts`
 --
 ALTER TABLE `accounts`
   MODIFY `account_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `cards`
+-- AUTO_INCREMENT dla tabeli `blik`
+--
+ALTER TABLE `blik`
+  MODIFY `blik_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT dla tabeli `cards`
 --
 ALTER TABLE `cards`
   MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `clients`
+-- AUTO_INCREMENT dla tabeli `clients`
 --
 ALTER TABLE `clients`
   MODIFY `client_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `transactions`
+-- AUTO_INCREMENT dla tabeli `transactions`
 --
 ALTER TABLE `transactions`
   MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- Constraints for dumped tables
+-- Ograniczenia dla zrzutów tabel
 --
 
 --
--- Constraints for table `accounts`
+-- Ograniczenia dla tabeli `accounts`
 --
 ALTER TABLE `accounts`
   ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`client_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `cards`
+-- Ograniczenia dla tabeli `blik`
+--
+ALTER TABLE `blik`
+  ADD CONSTRAINT `blik_ibfk_1` FOREIGN KEY (`card_id`) REFERENCES `cards` (`card_id`);
+
+--
+-- Ograniczenia dla tabeli `cards`
 --
 ALTER TABLE `cards`
   ADD CONSTRAINT `cards_ibfk_1` FOREIGN KEY (`account_number`) REFERENCES `accounts` (`account_number`) ON DELETE CASCADE;
 
 --
--- Constraints for table `transactions`
+-- Ograniczenia dla tabeli `transactions`
 --
 ALTER TABLE `transactions`
   ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`giver_account_number`) REFERENCES `accounts` (`account_number`) ON DELETE CASCADE,
