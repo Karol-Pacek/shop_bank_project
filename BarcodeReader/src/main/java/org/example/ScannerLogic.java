@@ -22,6 +22,9 @@ public class ScannerLogic {
             if (input.equalsIgnoreCase("pay")) {
                 payment();
                 break;
+            }else if (input.equalsIgnoreCase("blik")) {
+                blikPayment();
+                break;
             }
 
             Product result = readInput(input);
@@ -52,16 +55,18 @@ public class ScannerLogic {
             scannedProducts.put(product.barcode, product);
         }
     }
-                                    //receipt
+    //receipt
     private void printReceipt() {
         totalSum = 0;
         System.out.println("\n====== PARAGON ======");
+        System.out.printf("%-20s %5s %10s\n", "Produkt", "Ilość", "Cena (PLN)");
+        System.out.println("------------------------------");
         for (Map.Entry<String, Product> entry : scannedProducts.entrySet()) {
             Product product = entry.getValue();
             double subtotal = product.price * product.quantity;
             totalSum += subtotal;
-                                      //receipt view
-            System.out.println(product.name + " x" + product.quantity + " - " + subtotal + " PLN");
+          //receipt view
+            System.out.printf("%-20s %5d %10.2f\n", product.name, product.quantity, subtotal);
         }
         System.out.println("=====================");
         System.out.println("SUMA PLN: " + totalSum);
@@ -78,6 +83,16 @@ public class ScannerLogic {
         System.out.println("Podaj cvc: ");
         short cvc = sc.nextShort();
         db.paymentRequest(card_num, pin, cvc, totalSum, 1, "SKLEP Sklepex ZAKUPY");
+    }
+
+    private void blikPayment() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Podaj kod blik: ");
+        int blikCode = sc.nextInt();
+        String requested = "SKLEP Sklepex ZAKUPY";
+        int response = db.blikRequest(requested, blikCode);
+        System.out.println(response);
     }
 
     public static void clearScreen() {
